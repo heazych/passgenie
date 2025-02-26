@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PassGenie - Password Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #87CEEB;
+            --secondary-color: #32CD32;
+            --text-color: #333;
+            --background-color: #f0f8ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+
+        #generateBtn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        #generateBtn:hover {
+            background-color: #28a745;
+        }
+
+        #passwordOutput {
+            margin-top: 1rem;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            position: relative;
+        }
+
+        #copyBtn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        #copyBtn:hover {
+            background-color: #5f9ea0;
+        }
+
+        .tips {
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .tips h2 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .tips ul {
+            list-style-type: none;
+        }
+
+        .tips li {
+            margin-bottom: 0.5rem;
+        }
+
+        .tips li::before {
+            content: "🔒";
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            #generateBtn {
+                font-size: 1rem;
+            }
+
+            #passwordOutput {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PassGenie</h1>
+        <div class="icon">🔐</div>
+        <button id="generateBtn">Generate Password</button>
+        <div id="passwordOutput">
+            Your secure password will appear here
+            <button id="copyBtn">Copy</button>
+        </div>
+        <div class="tips">
+            <h2>Password Security Tips</h2>
+            <ul>
+                <li>Use a mix of uppercase and lowercase letters, numbers, and symbols</li>
+                <li>Make your password at least 12 characters long</li>
+                <li>Avoid using personal information in your passwords</li>
+                <li>Use a unique password for each account</li>
+                <li>Consider using a password manager for added security</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const generateBtn = document.getElementById('generateBtn');
+        const passwordOutput = document.getElementById('passwordOutput');
+        const copyBtn = document.getElementById('copyBtn');
+
+        function generatePassword() {
+            const length = 16;
+            const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+{}[]|:;<>,.?/~`";
+            let password = "";
+
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset[randomIndex];
+            }
+
+            return password;
+        }
+
+        generateBtn.addEventListener('click', () => {
+            const password = generatePassword();
+            passwordOutput.textContent = password;
+            passwordOutput.appendChild(copyBtn);
+            generateBtn.classList.add('pulse');
+            setTimeout(() => generateBtn.classList.remove('pulse'), 300);
+        });
+
+        copyBtn.addEventListener('click', () => {
+            const password = passwordOutput.textContent.trim();
+            navigator.clipboard.writeText(password).then(() => {
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
